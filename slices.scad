@@ -2,23 +2,29 @@
 include <config.scad>;
 use <head.scad>;
 
-
-for (i = [0:5])
+module slice(i)
 {
-    translate([i*diameter, 0, 0])
-    linear_extrude(material_z)
-    projection()
+    scale([1, 1, material_z*100])
+//    linear_extrude(material_z)
+//    projection()
     intersection()
     {
         // model
-        translate([0, 0, -height/2 + i*material_z])
+        translate([0, 0, -height/2 + material_z/2 + i*material_z])
         head();
         
         // plane
         cube([
             diameter,
             diameter,
-            material_z
+            0.01
             ], center=true);
     }
+}
+
+for (i = [0:height/material_z])
+{
+    //translate([i*diameter, 0, 0])
+    translate([0, 0, i*material_z])
+    slice(i);
 }
